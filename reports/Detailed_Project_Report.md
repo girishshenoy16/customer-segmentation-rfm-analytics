@@ -3,7 +3,7 @@
 ---
 
 ## 🖥️ Executive Dashboard Preview
-![CRM Analytics Executive Dashboard Preview](../docs/images/dashboard_screenshot.png)
+![CRM Analytics Executive Dashboard Preview](../docs/dashboard_showcase.png)
 *Note: Dashboard preview showcasing interactive filters, dynamic KPI cards, and RFM segment distributions. (Screenshot placeholder, to be updated later).*
 
 ---
