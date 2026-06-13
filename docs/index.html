@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation & RFM Analytics Dashboard</title>
+    <meta name="description" content="Executive-level Customer Segmentation & RFM Analytics dashboard. Features interactive filters, ROI win-back scenario projections, RFM segment distribution, and predictive models.">
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css?v=8">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar: Filters and Slicers -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-group">
+                    <i class="fa-solid fa-chart-line logo-icon" style="color: var(--accent-gold);"></i>
+                    <h2>CRM Portal</h2>
+                </div>
+            </div>
+            
+            <div class="sidebar-divider"></div>
+            
+            <div class="filters-section">
+                <h3><i class="fa-solid fa-sliders icon-spacing"></i> Interactive Slicers</h3>
+                
+                <div class="slicers-container">
+                    <div class="filter-group">
+                        <label for="filter-region">Geographic Region</label>
+                        <select id="filter-region" class="filter-control">
+                            <option value="all">All Regions</option>
+                            <option value="East">East</option>
+                            <option value="West">West</option>
+                            <option value="North">North</option>
+                            <option value="South">South</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filter-loyalty">Loyalty Status</label>
+                        <select id="filter-loyalty" class="filter-control">
+                            <option value="all">All Statuses</option>
+                            <option value="Platinum">Platinum</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Silver">Silver</option>
+                            <option value="Bronze">Bronze</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filter-category">Product Preference</label>
+                        <select id="filter-category" class="filter-control">
+                            <option value="all">All Categories</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Apparel">Apparel</option>
+                            <option value="Home & Kitchen">Home & Kitchen</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="Sports">Sports</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filter-age">Age Group</label>
+                        <select id="filter-age" class="filter-control">
+                            <option value="all">All Age Groups</option>
+                            <option value="18-24">18-24</option>
+                            <option value="25-34">25-34</option>
+                            <option value="35-44">35-44</option>
+                            <option value="45-54">45-54</option>
+                            <option value="55+">55+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sidebar-divider" style="margin: 12px 0;"></div>
+
+                <div class="sidebar-actions">
+                    <button id="btn-reset-filters" class="btn btn-secondary btn-reset-sidebar" title="Reset Slicers">
+                        <i class="fa-solid fa-arrows-rotate"></i> Reset Filters
+                    </button>
+
+                    <a href="preview_report.html" target="_blank" class="btn btn-primary btn-preview-report" title="View Business Strategy">
+                        <i class="fa-solid fa-lightbulb"></i> Business Strategy
+                    </a>
+                </div>
+
+                <div class="sidebar-divider" style="margin: 12px 0;"></div>
+
+                <!-- Navigation Menu (Modern Button Style) -->
+                <div class="nav-views-container" style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                    <h3><i class="fa-solid fa-compass icon-spacing"></i> Dashboard Views</h3>
+                    <button id="nav-btn-main" class="nav-btn btn btn-primary" onclick="switchDashboardView('main')" style="justify-content: flex-start; padding: 8px 12px; font-size: 12px; border: none; width: 100%; cursor: pointer; text-align: left;"><i class="fa-solid fa-house"></i> Main Dashboard</button>
+                    <button id="nav-btn-directory" class="nav-btn btn btn-secondary" onclick="switchDashboardView('directory')" style="justify-content: flex-start; padding: 8px 12px; font-size: 12px; border: none; width: 100%; cursor: pointer; text-align: left;"><i class="fa-solid fa-address-book"></i> Customer Directory</button>
+                    <button id="nav-btn-segment" class="nav-btn btn btn-secondary" onclick="switchDashboardView('segment')" style="justify-content: flex-start; padding: 8px 12px; font-size: 12px; border: none; width: 100%; cursor: pointer; text-align: left;"><i class="fa-solid fa-table-cells"></i> Segment Analyzer</button>
+                    <button id="nav-btn-risk" class="nav-btn btn btn-secondary" onclick="switchDashboardView('risk')" style="justify-content: flex-start; padding: 8px 12px; font-size: 12px; border: none; width: 100%; cursor: pointer; text-align: left;"><i class="fa-solid fa-triangle-exclamation"></i> Risk Tracker</button>
+                    <button id="nav-btn-regional" class="nav-btn btn btn-secondary" onclick="switchDashboardView('regional')" style="justify-content: flex-start; padding: 8px 12px; font-size: 12px; border: none; width: 100%; cursor: pointer; text-align: left;"><i class="fa-solid fa-earth-americas"></i> Regional Scorecard</button>
+                </div>
+            </div>
+            
+            <div class="sidebar-divider"></div>
+            
+            <div class="sidebar-footer">
+                <div class="meta-item">
+                    <span class="meta-label">LAST REFRESH</span>
+                    <span class="meta-value" id="last-refresh-time">-</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">DATA STATUS</span>
+                    <span class="meta-value text-green"><span class="dot"></span> Active</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">COVERAGE</span>
+                    <span class="meta-value">100% (105k accounts)</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content View -->
+        <main class="main-content">
+            <!-- Header Section -->
+            <header class="header">
+                <div class="header-left">
+                    <span class="header-tagline">Customer Segmentation & RFM Analytics</span>
+                    <h1 id="dashboard-title">Executive Segment Intelligence</h1>
+                </div>
+                <div class="header-right">
+                </div>
+            </header>
+
+            <!-- Top Section: Executive KPI Cards (8 Columns) -->
+            <section class="kpi-grid">
+                <!-- Card 1: Total Revenue -->
+                <div class="kpi-card" id="kpi-revenue">
+                    <div class="kpi-card-header">
+                        <span>TOTAL REVENUE</span>
+                        <i class="fa-solid fa-money-bill-trend-up kpi-icon text-blue"></i>
+                    </div>
+                    <div class="kpi-value" id="insight-total-revenue">$0</div>
+                    <div class="kpi-indicator">
+                        Goal: $150M budget
+                    </div>
+                </div>
+                
+                <!-- Card 2: Active Customers -->
+                <div class="kpi-card" id="kpi-customers-card">
+                    <div class="kpi-card-header">
+                        <span>ACTIVE CUSTOMERS</span>
+                        <i class="fa-solid fa-users kpi-icon text-gold"></i>
+                    </div>
+                    <div class="kpi-value" id="kpi-customers">0</div>
+                    <div class="kpi-indicator">
+                        <span class="text-green">+12.4% MoM</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Avg Order Value (AOV) -->
+                <div class="kpi-card" id="kpi-aov-card">
+                    <div class="kpi-card-header">
+                        <span>AVG ORDER VALUE</span>
+                        <i class="fa-solid fa-basket-shopping kpi-icon text-purple"></i>
+                    </div>
+                    <div class="kpi-value" id="kpi-aov">$0</div>
+                    <div class="kpi-indicator">
+                        Target baseline: $120.00
+                    </div>
+                </div>
+                
+                <!-- Card 4: Repeat Purchase Rate -->
+                <div class="kpi-card" id="kpi-retention-card">
+                    <div class="kpi-card-header">
+                        <span>REPEAT PURCHASE RATE</span>
+                        <i class="fa-solid fa-arrows-spin kpi-icon text-green"></i>
+                    </div>
+                    <div class="kpi-value" id="kpi-retention">0%</div>
+                    <div class="kpi-indicator">
+                        Target baseline: 65%
+                    </div>
+                </div>
+
+                <!-- Card 5: Avg Loyalty Score -->
+                <div class="kpi-card" id="kpi-loyalty-card">
+                    <div class="kpi-card-header">
+                        <span>AVG LOYALTY SCORE</span>
+                        <i class="fa-solid fa-gem kpi-icon text-orange"></i>
+                    </div>
+                    <div class="kpi-value" id="kpi-loyalty">0</div>
+                    <div class="kpi-indicator">
+                        Average behavioral score
+                    </div>
+                </div>
+
+                <!-- Card 6: Revenue At Risk -->
+                <div class="kpi-card" id="kpi-risk-card">
+                    <div class="kpi-card-header">
+                        <span>REVENUE AT RISK</span>
+                        <i class="fa-solid fa-triangle-exclamation kpi-icon text-red"></i>
+                    </div>
+                    <div class="kpi-value text-red" id="insight-revenue-at-risk">$0</div>
+                    <div class="kpi-indicator">
+                        From dormant segments
+                    </div>
+                </div>
+
+                <!-- Card 7: Recovery Opportunity -->
+                <div class="kpi-card" id="kpi-recovery-card">
+                    <div class="kpi-card-header">
+                        <span>RECOVERY POTENTIAL</span>
+                        <i class="fa-solid fa-hand-holding-dollar kpi-icon text-green"></i>
+                    </div>
+                    <div class="kpi-value text-green" id="insight-business-impact">$0</div>
+                    <div class="kpi-indicator">
+                        Assumes 15% winback rate
+                    </div>
+                </div>
+
+                <!-- Card 8: High-Risk Accounts -->
+                <div class="kpi-card" id="kpi-health-card">
+                    <div class="kpi-card-header">
+                        <span>HIGH-RISK ACCOUNTS</span>
+                        <i class="fa-solid fa-user-slash kpi-icon text-purple"></i>
+                    </div>
+                    <div class="kpi-value text-purple" id="kpi-high-risk-count">0</div>
+                    <div class="kpi-indicator">
+                        Critical re-activation focus
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== MAIN DASHBOARD VIEW ==================== -->
+            <div id="main-dashboard-view" class="view-section active-view">
+                <!-- Executive Summary & Priority Actions Section -->
+                <section class="executive-summary-card">
+                    <!-- Executive Performance Insights Panel (Briefing) -->
+                    <div class="executive-briefing-pane">
+                        <h3><i class="fa-solid fa-briefcase text-blue icon-spacing"></i> Executive Briefing</h3>
+                        <div class="briefing-grid">
+                            <div class="briefing-item highlight-status">
+                                <span class="briefing-label">Revenue Concentration (Champions + Loyal):</span>
+                                <span class="briefing-value text-blue" id="insight-revenue-concentration">0%</span>
+                            </div>
+                            <div class="briefing-performance-row">
+                                <div class="briefing-item highlight-driver">
+                                    <span class="briefing-label">Highest Revenue Segment:</span>
+                                    <span class="briefing-value text-green" id="insight-top-segment">-</span>
+                                </div>
+                                <div class="briefing-item highlight-risk">
+                                    <span class="briefing-label">Highest Revenue Region:</span>
+                                    <span class="briefing-value text-purple" id="insight-top-region">-</span>
+                                </div>
+                            </div>
+                            <div class="briefing-item highlight-action">
+                                <span class="briefing-label">Recommended Action:</span>
+                                <span class="briefing-value text-gold" id="insight-recommended-action" style="font-size: 12px; line-height: 1.5; font-weight: 500;">Loading strategic recommendations...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Priority Actions Pane -->
+                    <div class="priority-actions-pane">
+                        <h3><i class="fa-solid fa-list-check text-gold icon-spacing"></i> Priority Winback & Growth Actions</h3>
+                        <div class="priority-grid">
+                            <div class="priority-item priority-recovery">
+                                <span class="priority-num">1</span>
+                                <div class="priority-content">
+                                    <span class="priority-label">#1 Recovery: <span id="rec-recovery-impact" class="text-green">$0</span></span>
+                                    <div class="priority-text" id="rec-recovery-text" style="font-size: 10.5px; font-weight: normal; color: var(--text-secondary);">Win-back re-engagement campaign.</div>
+                                </div>
+                            </div>
+                            <div class="priority-item priority-protection">
+                                <span class="priority-num">2</span>
+                                <div class="priority-content">
+                                    <span class="priority-label">#2 Protection: <span id="rec-saved-impact" class="text-blue">$0</span></span>
+                                    <div class="priority-text" id="rec-saved-text" style="font-size: 10.5px; font-weight: normal; color: var(--text-secondary);">VIP direct account reach-out.</div>
+                                </div>
+                            </div>
+                            <div class="priority-item priority-upsell">
+                                <span class="priority-num">3</span>
+                                <div class="priority-content">
+                                    <span class="priority-label">#3 Upsell: <span id="rec-upsell-impact" class="text-purple" style="color: var(--accent-purple);">$0</span></span>
+                                    <div class="priority-text" id="rec-upsell-text" style="font-size: 10.5px; font-weight: normal; color: var(--text-secondary);">Cross-category checkout bundles.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <br>
+                <!-- Middle Section: Revenue Trends & Forecast Analysis -->
+                <section class="charts-row middle-charts">
+                    <!-- RFM Segment Distribution Chart -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-chart-column text-blue icon-spacing"></i> RFM Segment Distribution</h3>
+                            <span class="badge badge-info">Segment Volume</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-segments"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Share by Segment Chart -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-chart-pie text-purple icon-spacing"></i> Revenue Share by Segment</h3>
+                            <span class="badge badge-purple">Contribution Share</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-revenue-share"></canvas>
+                        </div>
+                    </div>
+                </section>
+                <br>
+
+                <!-- Bottom Section: Category Performance & Regional Scorecard Table -->
+                <section class="charts-row bottom-row4">
+                    <!-- Product Category Performance -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-tags text-gold icon-spacing"></i> Category Revenue Performance</h3>
+                        </div>
+                        <div class="chart-container" style="height: 180px !important;">
+                            <canvas id="chart-category-revenue"></canvas>
+                        </div>
+                        <div class="category-insights" id="category-insights" style="margin-top: 8px; font-size: 11px; display: flex; flex-direction: column; gap: 4px; border-top: 1px dashed var(--border-color); padding-top: 8px;">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Predictive Forecasting and Deep-Dives Row (Split) -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-square-poll-vertical text-purple icon-spacing"></i> Predictive Forecasts & Churn Trends</h3>
+                            <span class="badge badge-purple">3-6 Month Outlook</span>
+                        </div>
+                        <div class="forecast-container">
+                            <div class="forecast-grid">
+                                <div class="forecast-box">
+                                    <span class="forecast-label">Projected Revenue (Q3)</span>
+                                    <span class="forecast-val" id="forecast-revenue">$0</span>
+                                    <div class="sparkline-container">
+                                        <canvas id="sparkline-revenue"></canvas>
+                                    </div>
+                                </div>
+                                <div class="forecast-box">
+                                    <span class="forecast-label">Expected Net Growth</span>
+                                    <span class="forecast-val" id="forecast-growth">+0</span>
+                                    <div class="sparkline-container">
+                                        <canvas id="sparkline-growth"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="scenario-grid">
+                                <div class="scenario-box best-case">
+                                    <span class="scenario-label">Winback Recovery Potential</span>
+                                    <span class="scenario-val" id="roi-recoverable">$0</span>
+                                     <div class="confidence-tag text-green"><i class="fa-solid fa-circle-check"></i> Assumes 15% winback success</div>
+                                </div>
+                                <div class="scenario-box worst-case">
+                                    <span class="scenario-label">Predicted Churn Rate</span>
+                                    <span class="scenario-val" id="forecast-churn">0%</span>
+                                    <div class="sparkline-container">
+                                        <canvas id="sparkline-churn"></canvas>
+                                    </div>
+                                    <div class="confidence-tag text-red" style="margin-top: 4px;"><i class="fa-solid fa-circle-exclamation"></i> Churn Risk Flag</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <br>
+
+                <!-- Bottom Section: Operational Deep-Dive Reports Grid -->
+                <section class="drivers-row" id="deep-dives-section">
+                    <div class="drivers-card" style="padding: 12px 20px;">
+                        <div class="drivers-header" style="margin-bottom: 8px; padding-bottom: 4px;">
+                            <h2><i class="fa-solid fa-folder-open text-blue icon-spacing"></i> Operational Deep-Dive Reports</h2>
+                            <span class="badge badge-info">Interactive Dashboards</span>
+                        </div>
+
+                        <div class="deep-dives-grid">
+                            <!-- Customer Directory -->
+                            <div onclick="switchDashboardView('directory')" class="deep-dive-card card-directory">
+                                <div class="deep-dive-header">
+                                    <div class="deep-dive-icon bg-blue"><i class="fa-solid fa-address-book"></i></div>
+                                    <h4>Customer Directory</h4>
+                                </div>
+                                <p class="deep-dive-desc">Search accounts, check loyalty tiers, and view behavioral segments.</p>
+                                <span class="deep-dive-action">View <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                            <!-- Segment Opportunity -->
+                            <div onclick="switchDashboardView('segment')" class="deep-dive-card card-segment">
+                                <div class="deep-dive-header">
+                                    <div class="deep-dive-icon bg-green"><i class="fa-solid fa-table-cells"></i></div>
+                                    <h4>Segment Matrix</h4>
+                                </div>
+                                <p class="deep-dive-desc">Explore granular RFM cohorts, revenue share, and action plans.</p>
+                                <span class="deep-dive-action">View <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                            <!-- Risk Tracker -->
+                            <div onclick="switchDashboardView('risk')" class="deep-dive-card card-risk">
+                                <div class="deep-dive-header">
+                                    <div class="deep-dive-icon bg-orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                    <h4>Risk Tracker</h4>
+                                </div>
+                                <p class="deep-dive-desc">Monitor high-value accounts sliding into dormancy with re-activation alerts.</p>
+                                <span class="deep-dive-action">View <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                            <!-- Regional Scorecard -->
+                            <div onclick="switchDashboardView('regional')" class="deep-dive-card card-regional">
+                                <div class="deep-dive-header">
+                                    <div class="deep-dive-icon bg-purple"><i class="fa-solid fa-earth-americas"></i></div>
+                                    <h4>Regional Scorecard</h4>
+                                </div>
+                                <p class="deep-dive-desc">Analyze geographical distributions, transaction value, and performance spikes.</p>
+                                <span class="deep-dive-action">View <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ==================== CUSTOMER DIRECTORY VIEW ==================== -->
+            <div id="customer-directory-view" class="view-section">
+                <section id="customer-directory-detail" class="chart-card" style="margin-top: 10px;">
+                    <div class="chart-header search-header" style="border-bottom: none; margin-bottom: 12px; padding-bottom: 0;">
+                        <div class="search-left">
+                            <h3 style="font-size: 14px;"><i class="fa-solid fa-address-book icon-spacing text-blue"></i> Customer Lookup Directory</h3>
+                            <p class="search-subtitle" style="font-size: 11px; margin-top: 2px;">Search by Customer ID or Name. Filter by Region, Loyalty, and Products in the sidebar.</p>
+                        </div>
+                        <div class="search-box-container">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="directory-search" placeholder="Search customer ID or name...">
+                        </div>
+                    </div>
+                    <div class="directory-table-container" style="max-height: 520px !important;">
+                        <table class="dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Name</th>
+                                    <th>Region</th>
+                                    <th>Age</th>
+                                    <th class="num">Orders</th>
+                                    <th class="num">Total Spend</th>
+                                    <th class="num">AOV</th>
+                                    <th>Loyalty Status</th>
+                                    <th>RFM Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-directory">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="btn-toggle-directory" class="btn btn-secondary" style="width: auto; margin: 12px auto 0 auto; display: block; padding: 8px 16px; font-size: 12px;">
+                        <i class="fa-solid fa-list-ul"></i> View Full Customer Directory
+                    </button>
+                </section>
+            </div>
+
+            <!-- ==================== SEGMENT ANALYZER VIEW ==================== -->
+            <div id="segment-analyzer-view" class="view-section">
+                <section id="segment-matrix-detail" class="chart-card" style="margin-top: 10px;">
+                    <div class="chart-header" style="border-bottom: none; margin-bottom: 8px; padding-bottom: 0;">
+                        <div>
+                            <h3 style="font-size: 14px;"><i class="fa-solid fa-table-cells text-green icon-spacing"></i> Segment Opportunity Matrix</h3>
+                            <p style="margin: 2px 0 10px 0; font-size: 11px; color: var(--text-secondary);">
+                                Granular breakdown of RFM customer segments, their revenue contributions, and targeted action plans.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="table-container" style="max-height: 520px; overflow-y: auto;">
+                        <table class="dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>RFM Segment</th>
+                                    <th class="num">Customer Count</th>
+                                    <th class="num">Total Revenue</th>
+                                    <th class="num">Revenue Share</th>
+                                    <th style="text-align: center;">Risk Level</th>
+                                    <th style="text-align: center;">Strategic Priority</th>
+                                    <th>Target Action Campaign</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-opportunity-matrix">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ==================== RISK TRACKER VIEW ==================== -->
+            <div id="risk-tracker-view" class="view-section">
+                <section id="risk-tracker-detail" class="chart-card" style="margin-top: 10px;">
+                    <div class="chart-header" style="border-bottom: none; margin-bottom: 8px; padding-bottom: 0;">
+                        <div>
+                            <h3 style="font-size: 14px;"><i class="fa-solid fa-triangle-exclamation text-orange icon-spacing"></i> Top At-Risk High-Value Customers</h3>
+                            <p style="margin: 2px 0 10px 0; font-size: 11px; color: var(--text-secondary);">
+                                Lists critical accounts in At-Risk and Cannot Lose Them segments with high dormancy days. Direct engagement triggers support team reach-out.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="table-container" style="max-height: 520px !important; overflow-y: auto;">
+                        <table class="dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Name</th>
+                                    <th class="num">Spend Exposure</th>
+                                    <th>Dormancy Period</th>
+                                    <th>Loyalty Status</th>
+                                    <th>Engagement Priority</th>
+                                    <th>Quick Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-at-risk">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ==================== REGIONAL SCORECARD VIEW ==================== -->
+            <div id="regional-scorecard-view" class="view-section">
+                <section id="regional-scorecard-detail" style="margin-top: 10px;">
+                    <div class="regional-grid-layout">
+                        <!-- Left side: Visual Chart -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3><i class="fa-solid fa-chart-bar text-blue icon-spacing"></i> Regional Revenue Performance</h3>
+                            </div>
+                            <div class="chart-container" style="height: 300px !important;">
+                                <canvas id="chart-region-revenue"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Right side: Scorecard Table -->
+                        <div class="chart-card regional-scorecard-card">
+                            <div>
+                                <div class="chart-header">
+                                    <h3><i class="fa-solid fa-earth-americas text-purple icon-spacing"></i> Geographic Performance Scorecard</h3>
+                                </div>
+                                <div class="table-container" style="margin-top: 8px;">
+                                    <table class="dashboard-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Region</th>
+                                                <th class="num">Revenue</th>
+                                                <th class="num">Customers</th>
+                                                <th class="num">AOV</th>
+                                                <th class="num">Revenue Share</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-region-performance">
+                                            <!-- Populated dynamically by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="category-insights" id="regional-insights" style="margin-top: 14px; background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 6px; font-size: 11px;">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Load dashboard_data.js first (declares global dashboardData) -->
+    <script src="data/dashboard_data.js?v=8"></script>
+    <!-- Load main.js (processes dashboardData, updates visuals) -->
+    <script src="js/main.js?v=8"></script>
+</body>
+</html>
