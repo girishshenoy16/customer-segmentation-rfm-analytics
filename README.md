@@ -2,9 +2,9 @@
 
 📅 **Data Coverage:** 105,000 Customer Records
 
-💻 **Interactive Portal:** [Live Dashboard (GitHub Pages)](https://your-github-pages-link)
+💻 **Interactive Portal:** [Live Dashboard (GitHub Pages)](https://girishshenoy16.github.io/customer-segmentation-rfm-analytics/)
 
-📂 **Executive Deliverable:** [Strategic Business Analysis Report (Print/PDF)](https://girishshenoy16.github.io/sales-forecasting-revenue-trend-analysis/preview_report.html)
+📂 **Executive Deliverable:** [Strategic Business Analysis Report (Print/PDF)](https://girishshenoy16.github.io/customer-segmentation-rfm-analytics/preview_report.html)
 
 ---
 
