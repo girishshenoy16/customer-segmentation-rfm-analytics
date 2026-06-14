@@ -394,11 +394,8 @@ python scripts/generate_customer_data.py
 python scripts/rfm_analysis.py
 ```
 
-Open:
+Open in your browser:
 
 ```text
 docs/index.html
 ```
-in your browser.
-
----
