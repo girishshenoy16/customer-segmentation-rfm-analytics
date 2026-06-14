@@ -2,7 +2,7 @@
 
 📅 **Data Coverage:** 105,000 Customer Records
 
-💻 **Interactive Portal:** [Live Dashboard (GitHub Pages)](https://girishshenoy16.github.io/customer-segmentation-rfm-analytics/)
+💻 **Interactive Portal:** [Live Dashboard (GitHub Pages)](https://girishshenoy16.github.io/customer-segmentation-rfm-analytics)
 
 📂 **Executive Deliverable:** [Strategic Business Analysis Report (Print/PDF)](https://girishshenoy16.github.io/customer-segmentation-rfm-analytics/preview_report.html)
 
@@ -72,7 +72,7 @@ The dashboard enables executives to prioritize retention initiatives, optimize m
 # 4. Repository & Project Structure
 
 ```text
-Customer Segmentation using RFM Model/
+customer-segmentation-rfm-analytics/
 ├── data/
 │   ├── raw_customer_transactions.csv        # Raw customer transaction history (105k records)
 │   └── customer_rfm_segmented.csv          # Processed customer database with RFM segments
@@ -380,9 +380,9 @@ This project simulates how CRM, Revenue Operations, Customer Success, and Market
 # 16. Local Execution Guide
 
 ```bash
-git clone https://github.com/girishshenoy16/customer-segmentation-crm-analytics-dashboard.git
+git clone https://github.com/girishshenoy16/customer-segmentation-rfm-analytics.git
 
-cd customer-segmentation-crm-analytics-dashboard
+cd customer-segmentation-crm-analytics
 
 python -m venv .venv
 
@@ -399,7 +399,6 @@ Open:
 ```text
 docs/index.html
 ```
-
 in your browser.
 
 ---
